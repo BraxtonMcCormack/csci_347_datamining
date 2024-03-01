@@ -1,6 +1,5 @@
 from itertools import combinations
 from collections import Counter, defaultdict, deque
-
 from matplotlib import pyplot as plt
 
 
@@ -25,19 +24,6 @@ class Graph(object):
         if not self._directed:
             self._graph[node2].add(node1)
 
-    def remove(self, node):
-        """ Remove all references to node """
-
-        for n, cxns in self._graph.items():  # python3: items(); python2: iteritems()
-            try:
-                cxns.remove(node)
-            except KeyError:
-                pass
-        try:
-            del self._graph[node]
-        except KeyError:
-            pass
-
     def is_connected(self, node1, node2):
         """ Is node1 directly connected to node2 """
 
@@ -59,10 +45,8 @@ class Graph(object):
                     queue.append((neighbor, path + [neighbor]))
         return None
 
-    def closeness_centrality(self, nodes=None):
+    def closeness_centrality(self, nodes):
         """Calculate the closeness centrality for specified nodes"""
-        if nodes is None:
-            nodes = self._graph.keys()  # Calculate for all nodes if none are specified
         centrality = {}
         for node in nodes:
             sum_of_distances = sum(len(self.find_shortest_path(node, other)) - 1
@@ -214,7 +198,7 @@ print(f"Betweenness centrality for vertices 3 and 12: {specific_vertices_central
 average_length = g.average_shortest_path_length()
 print(f"Average shortest path length: {average_length}")
 #question 6, commented out because it stops the code until I close it and am lazy
-# g.plot_degree_distribution()
+g.plot_degree_distribution()
 #question 7
 clustering_coefficient_of_vertex_3 = g.clustering_coefficient('3')
 print(f"Clustering coefficient of vertex 3: {clustering_coefficient_of_vertex_3}")

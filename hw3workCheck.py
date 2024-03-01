@@ -1,4 +1,5 @@
 import networkx as nx
+import numpy as np
 import matplotlib.pyplot as plt
 
 # Define the connections
@@ -81,3 +82,31 @@ print(f'"average_shortest_path_length": {average_shortest_path_length}')
 print(f'"clustering_coefficient_3": {clustering_coefficient_3}')
 #question 8
 print(f'"average_clustering_coefficient": {average_clustering_coefficient}')
+
+
+
+
+# Create an Erdos-Renyi random graph
+n = 200  # number of nodes
+p = 0.1  # probability of edge creation
+G = nx.erdos_renyi_graph(n, p)
+
+# Compute betweenness centrality and degree for each node
+betweenness_centrality = nx.betweenness_centrality(G)
+degree = dict(G.degree())
+
+# Normalize betweenness centrality for node size scaling (2000x for visibility)
+node_size = [v * 20000 for v in betweenness_centrality.values()]
+
+# Map degrees to colors
+max_degree = max(degree.values())
+min_degree = min(degree.values())
+colors = [(degree[node] - min_degree) / (max_degree - min_degree) for node in G.nodes()]
+
+# Draw the graph
+plt.figure(figsize=(12, 8))
+nx.draw_networkx(G, node_color=colors, node_size=node_size, cmap=plt.cm.plasma,
+                 with_labels=False, edge_color="grey", alpha=0.7)
+plt.axis('off')
+plt.title("Erdos-Renyi Random Graph Visualization")
+plt.show()
